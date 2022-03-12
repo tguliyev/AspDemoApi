@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspDemo.Api", "AspDemo.Api\AspDemo.Api.csproj", "{B14639BF-D8B8-408E-B52C-96A68E444256}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspDemo.UnitTests", "AspDemo.UnitTests\AspDemo.UnitTests.csproj", "{89527CBC-B014-404B-9BE2-7EC617ADA22E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B14639BF-D8B8-408E-B52C-96A68E444256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B14639BF-D8B8-408E-B52C-96A68E444256}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B14639BF-D8B8-408E-B52C-96A68E444256}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B14639BF-D8B8-408E-B52C-96A68E444256}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89527CBC-B014-404B-9BE2-7EC617ADA22E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89527CBC-B014-404B-9BE2-7EC617ADA22E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89527CBC-B014-404B-9BE2-7EC617ADA22E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89527CBC-B014-404B-9BE2-7EC617ADA22E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

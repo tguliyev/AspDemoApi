@@ -13,7 +13,7 @@ namespace AspDemo.UnitTests;
 
 public class ItemsControllerTests
 {
-    private readonly Random rand = new Random();
+    private readonly Random Rand = new Random();
     private readonly Mock<IItemsRepository> RepositoryStub = new Mock<IItemsRepository>();
 
     [Fact]
@@ -22,41 +22,124 @@ public class ItemsControllerTests
         // Arrange
         RepositoryStub.Setup(repo => repo.GetItemAsync(It.IsAny<int>())).ReturnsAsync((Item)null);
 
-        ItemsController controller = new ItemsController(RepositoryStub.Object);
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
         
         // Act
-        ActionResult<ItemDTO> result = await controller.GetItemAsync(rand.Next());
+        ActionResult<ItemDTO> Result = await Controller.GetItemAsync(Rand.Next());
 
         // Assert
-        Assert.IsType<NotFoundResult>(result.Result);
+        Assert.IsType<NotFoundResult>(Result.Result);
     }
 
     [Fact]
     public async Task GetItemAsync_WithExistingItem_ReturnsExpectedItem()
     {
         // Arrange 
-        Item expectedItem = CreateRandomItem();
-        RepositoryStub.Setup(repo => repo.GetItemAsync(It.IsAny<int>())).ReturnsAsync(expectedItem);
+        Item ExpectedItem = CreateRandomItem();
+        RepositoryStub.Setup(repo => repo.GetItemAsync(It.IsAny<int>())).ReturnsAsync(ExpectedItem);
 
-        ItemsController controller = new ItemsController(RepositoryStub.Object);
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
 
         // Act 
-        ActionResult<ItemDTO> result = await controller.GetItemAsync(rand.Next());
+        OkObjectResult? Result = (await Controller.GetItemAsync(Rand.Next())).Result as OkObjectResult;
 
         // Assert
-        // Problems here need refactoring
-        var okresult = Assert.IsType<OkObjectResult>(result.Result);
-        Assert.IsType<ItemDTO>(okresult.Value);
-        //result.Value.Should().BeEquivalentTo(expectedItem);
+        Result?.Value.Should().BeEquivalentTo(
+            ExpectedItem, 
+            options => options.ComparingByMembers<Item>());
+    }
+
+    [Fact]
+    public async Task GetItemsAsync_WithExistingItems_ReturnsAllItems()
+    {
+        // Arrange
+        Item[] ExspectedItems = new Item[] { CreateRandomItem(), CreateRandomItem(), CreateRandomItem() };
+        RepositoryStub.Setup(repo => repo.GetItemsAsync()).ReturnsAsync(ExspectedItems);
+
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
+
+        // Act
+        OkObjectResult? Result = (await Controller.GetItemsAsync()).Result as OkObjectResult;
+
+        // Assert
+        Result?.Value.Should().BeEquivalentTo(
+            ExspectedItems,
+            options => options.ComparingByMembers<Item>());
+    }
+
+    [Fact]
+    public async Task CreateItemAsync_WithItemToCreate_ReturnsCreatedItem()
+    {
+        // Arrange
+        CreateItemDTO ItemToCreate = new CreateItemDTO
+        {
+            Name = Guid.NewGuid().ToString(),
+            Price = Rand.Next()
+        };
+
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
+
+        // Act
+        CreatedAtActionResult? Result = (await Controller.CreateItemAsync(ItemToCreate)).Result as CreatedAtActionResult;
+
+        // Assert
+        Result?.Value.Should().BeEquivalentTo(
+            ItemToCreate,
+            options => options.ComparingByMembers<ItemDTO>().ExcludingMissingMembers());
+    }
+
+    [Fact]
+    public async Task UpdateItemAsync_WithUnexistingItem_ReturnsNotFound()
+    {
+        // Arrange
+        RepositoryStub.Setup(repo => repo.GetItemAsync(It.IsAny<int>())).ReturnsAsync((Item)null);
+
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
+
+        UpdateItemDTO UpdateingItem = new UpdateItemDTO()
+        {
+            Name = Guid.NewGuid().ToString(),
+            Price = Rand.Next()
+        };
+        int Id = Rand.Next();
+
+        // Act
+        ActionResult Result = await Controller.UpdateItemAsync(Id, UpdateingItem);
+
+        // Assert
+        Result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task UpdateItemAsync_WithExistingItem_ReturnsNoContent()
+    {
+        // Arrange
+        Item ExistingItem = CreateRandomItem();
+        RepositoryStub.Setup(repo => repo.GetItemAsync(It.IsAny<int>())).ReturnsAsync(ExistingItem);
+
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
+
+        UpdateItemDTO UpdateingItem = new UpdateItemDTO()
+        {
+            Name = Guid.NewGuid().ToString(),
+            Price = Rand.Next()
+        };
+        int Id = Rand.Next();
+
+        // Act
+        ActionResult Result = await Controller.UpdateItemAsync(Id, UpdateingItem);
+
+        // Assert
+        Result.Should().BeOfType<NoContentResult>();
     }
 
     private Item CreateRandomItem()
     {
         return new Item()
         {
-            Id = rand.Next(),
+            Id = Rand.Next(),
             Name = Guid.NewGuid().ToString(),
-            Price = rand.Next(),
+            Price = Rand.Next(),
             CreatedTime = DateTimeOffset.UtcNow
         };
     }

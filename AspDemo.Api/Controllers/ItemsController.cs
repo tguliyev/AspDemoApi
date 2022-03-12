@@ -26,7 +26,7 @@ namespace AspDemo.Api.Controllers
             IEnumerable<ItemDTO>? items =  (await repository.GetItemsAsync())?
                                             .Select(item => item.AsDTO());
 
-            return items == null ? NoContent() : Ok(items);
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
