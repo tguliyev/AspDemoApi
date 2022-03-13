@@ -133,6 +133,37 @@ public class ItemsControllerTests
         Result.Should().BeOfType<NoContentResult>();
     }
 
+    [Fact]
+    public async Task DeleteItemAsync_WithUnexistingItem_ReturnsNotFound()
+    {
+        // Arrange
+        RepositoryStub.Setup(repo => repo.GetItemAsync(It.IsAny<int>())).ReturnsAsync((Item)null);
+
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
+        
+        // Act
+        ActionResult Result = await Controller.DeleteItemAsync(Rand.Next());
+
+        // Assert
+        Assert.IsType<NotFoundResult>(Result);
+    }
+
+    [Fact]
+    public async Task DeleteItemAsync_WithExistingItem_ReturnsNoContent()
+    {
+        // Arrange
+        Item ExistingItem = CreateRandomItem();
+        RepositoryStub.Setup(repo => repo.GetItemAsync(It.IsAny<int>())).ReturnsAsync(ExistingItem);
+
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
+        
+        // Act
+        ActionResult Result = await Controller.DeleteItemAsync(Rand.Next());
+
+        // Assert
+        Assert.IsType<NoContentResult>(Result);
+    }
+
     private Item CreateRandomItem()
     {
         return new Item()
