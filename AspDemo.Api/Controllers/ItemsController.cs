@@ -14,47 +14,47 @@ namespace AspDemo.Api.Controllers
     [Route("Items")]
     public class ItemsController : ControllerBase
     {
-        private IItemsRepository repository;
-        public ItemsController(IItemsRepository _repository)
+        private IItemsRepository Repository;
+        public ItemsController(IItemsRepository _Repository)
         {
-            this.repository = _repository;
+            this.Repository = _Repository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemDTO>?>> GetItemsAsync()
         {
-            IEnumerable<ItemDTO>? items =  (await repository.GetItemsAsync())?
-                                            .Select(item => item.AsDTO());
+            IEnumerable<ItemDTO>? Items =  (await Repository.GetItemsAsync())?
+                                            .Select(Item => Item.AsDTO());
 
-            return Ok(items);
+            return Ok(Items);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ItemDTO>> GetItemAsync(int id)
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<ItemDTO>> GetItemAsync(int Id)
         {
-            Item? item = await repository.GetItemAsync(id);
+            Item? Item = await Repository.GetItemAsync(Id);
 
-            return item == null ? NotFound() : Ok(item.AsDTO()); 
+            return Item == null ? NotFound() : Ok(Item.AsDTO()); 
         }
 
         [HttpPost]
-        public async Task<ActionResult<ItemDTO>> CreateItemAsync(CreateItemDTO createItemDTO)
+        public async Task<ActionResult<ItemDTO>> CreateItemAsync(CreateItemDTO ItemToCreateDTO)
         {
-            Item item = new Item()
+            Item Item = new Item()
             {
-                Name = createItemDTO.Name,
-                Price = createItemDTO.Price
+                Name = ItemToCreateDTO.Name,
+                Price = ItemToCreateDTO.Price
             };
 
-            await repository.CreateItemAsync(item);
+            await Repository.CreateItemAsync(Item);
 
-            return new CreatedAtActionResult(actionName: nameof(GetItemAsync), controllerName: null, routeValues: new { id = item.Id }, value: item.AsDTO());
+            return new CreatedAtActionResult(actionName: nameof(GetItemAsync), controllerName: null, routeValues: new { Id = Item.Id }, value: Item.AsDTO());
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateItemAsync(int id, UpdateItemDTO ItemToUpdateDTO)
+        [HttpPut("{Id}")]
+        public async Task<ActionResult> UpdateItemAsync(int Id, UpdateItemDTO ItemToUpdateDTO)
         {
-            Item? ItemToUpdate = await repository.GetItemAsync(id);
+            Item? ItemToUpdate = await Repository.GetItemAsync(Id);
 
             if(ItemToUpdate == null)
                 return NotFound();
@@ -62,20 +62,20 @@ namespace AspDemo.Api.Controllers
             ItemToUpdate.Name = ItemToUpdateDTO.Name;
             ItemToUpdate.Price = ItemToUpdateDTO.Price;
 
-            await repository.UpdateItemAsync(ItemToUpdate);
+            await Repository.UpdateItemAsync(ItemToUpdate);
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteItemAsync(int id)
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult> DeleteItemAsync(int Id)
         {
-            Item? deletingItem = await repository.GetItemAsync(id);
+            Item? ItemToDelete = await Repository.GetItemAsync(Id);
             
-            if (deletingItem == null)
+            if (ItemToDelete == null)
                 return NotFound();
             
-            await repository.DeleteItemAsync(id);
+            await Repository.DeleteItemAsync(ItemToDelete);
             return NoContent();
         }
     }

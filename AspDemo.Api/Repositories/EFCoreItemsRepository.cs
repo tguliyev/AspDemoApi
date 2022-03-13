@@ -9,45 +9,40 @@ namespace AspDemo.Api.Repositories
 {
     public class EFCoreItemsRepository : IItemsRepository
     {
-        private IDataContext context;
-        public EFCoreItemsRepository(IDataContext _context)
+        private IDataContext Context;
+        public EFCoreItemsRepository(IDataContext Context)
         {
-            context = _context;
+            this.Context = Context;
         }
 
         public async Task<IEnumerable<Item>?> GetItemsAsync()
         {
-            return await Task.Run(() => context.Items?.AsEnumerable());
+            return await Task.Run(() => Context.Items?.AsEnumerable());
         }
 
-        public async Task<Item?> GetItemAsync(int id)
+        public async Task<Item?> GetItemAsync(int Id)
         {
-            Item? item = await Task.Run<Item?>(() => context.Items?
-                                            .Where(item => item.Id == id)
+            return await Task.Run<Item?>(() => Context.Items?
+                                            .Where(item => item.Id == Id)
                                             .FirstOrDefault());
-
-            return item;
         }
 
-        public async Task CreateItemAsync(Item item)
+        public async Task CreateItemAsync(Item ItemToCreate)
         {
-            await context.Items.AddAsync(item);
-            await context.SaveChangesAsync();
+            await Context.Items.AddAsync(ItemToCreate);
+            await Context.SaveChangesAsync();
         }
 
-        public async Task UpdateItemAsync(Item item)
+        public async Task UpdateItemAsync(Item ItemToUpdate)
         {    
-            context.Items.Update(item);
-
-            await context.SaveChangesAsync();
+            Context.Items?.Update(ItemToUpdate);
+            await Context.SaveChangesAsync();
         }
 
-        public async Task DeleteItemAsync(int id)
+        public async Task DeleteItemAsync(Item ItemToDelete)
         {
-            Item? deletingItem = await context.Items.FindAsync(id);
-
-            context.Items?.Remove(deletingItem);
-            await context.SaveChangesAsync();
+            Context.Items?.Remove(ItemToDelete);
+            await Context.SaveChangesAsync();
         }
     }
 }

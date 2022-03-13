@@ -17,46 +17,46 @@ namespace AspDemo.Api
     {
         static void Main(string[] args)
         {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder Builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
 
-            builder.Services.AddControllers(options =>
+            Builder.Services.AddControllers(options =>
             {
                 options.SuppressAsyncSuffixInActionNames = false;
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            Builder.Services.AddEndpointsApiExplorer();
+            Builder.Services.AddSwaggerGen();
 
-            builder.Services.AddSingleton<IDataContext, DataContext>();
-            builder.Services.AddSingleton<IItemsRepository, EFCoreItemsRepository>();
+            Builder.Services.AddSingleton<IDataContext, DataContext>();
+            Builder.Services.AddSingleton<IItemsRepository, EFCoreItemsRepository>();
             
-            builder.Services.AddHealthChecks()
-                            .AddSqlServer(connectionString: $"Data Source={builder.Configuration["mssql:data-source"]};" + 
-                                                            $"Database={builder.Configuration["mssql:database"]};" + 
-                                                            $"User Id={builder.Configuration["mssql:username"]};"+
-                                                            $"Password={builder.Configuration["mssql:password"]}", 
+            Builder.Services.AddHealthChecks()
+                            .AddSqlServer(connectionString: $"Data Source={Builder.Configuration["mssql:data-source"]};" + 
+                                                            $"Database={Builder.Configuration["mssql:database"]};" + 
+                                                            $"User Id={Builder.Configuration["mssql:username"]};"+
+                                                            $"Password={Builder.Configuration["mssql:password"]}", 
                                           name: "mssql server",
                                           timeout: TimeSpan.FromSeconds(3), 
                                           tags: new string[] {"ready"});
             
 
-            WebApplication app = builder.Build();
+            WebApplication App = Builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (App.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                App.UseSwagger();
+                App.UseSwaggerUI();
             }
             
-            app.MapHealthChecks("/health/ready", new HealthCheckOptions()
+            App.MapHealthChecks("/health/ready", new HealthCheckOptions()
             {
                 Predicate = check => check.Tags.Contains("ready"),
                 ResponseWriter = async (context, report) =>
                 {
-                    var result = JsonSerializer.Serialize(new 
+                    var Result = JsonSerializer.Serialize(new 
                     {
                         status = report.Status.ToString(),
                         cheks = report.Entries.Select(entry => new
@@ -69,25 +69,25 @@ namespace AspDemo.Api
                     });
 
                     context.Response.ContentType = MediaTypeNames.Application.Json;
-                    await context.Response.WriteAsync(result);
+                    await context.Response.WriteAsync(Result);
                 }
             });
 
-            app.MapHealthChecks("/health/live", new HealthCheckOptions()
+            App.MapHealthChecks("/health/live", new HealthCheckOptions()
             {
                 Predicate = _ => false
             });
 
-            if (builder.Environment.IsDevelopment())
+            if (Builder.Environment.IsDevelopment())
             {
-                app.UseHttpsRedirection();
+                App.UseHttpsRedirection();
             }
 
-            app.UseAuthorization();
+            App.UseAuthorization();
 
-            app.MapControllers();
+            App.MapControllers();
 
-            app.Run();
+            App.Run();
 
             
         }

@@ -7,7 +7,7 @@ namespace AspDemo.Api.EntityFramework
 {
     public class DataContext : DbContext, IDataContext
     {
-        private IConfiguration config;
+        private IConfiguration Config;
         private readonly string DB_PASSWORD;
         private readonly string DB_SOURCE;
         private readonly string DB_DATABASE;
@@ -18,23 +18,23 @@ namespace AspDemo.Api.EntityFramework
         }
         public DbSet<Item>? Items { get; set; }
 
-        public DataContext(IConfiguration _config)
+        public DataContext(IConfiguration Config)
         {
-            this.config = _config;
-            DB_PASSWORD = config["mssql:password"];
-            DB_SOURCE = config["mssql:data-source"];
-            DB_DATABASE = config["mssql:database"];
-            DB_USERNAME = config["mssql:username"];
+            this.Config = Config;
+            DB_PASSWORD = Config["mssql:password"];
+            DB_SOURCE = Config["mssql:data-source"];
+            DB_DATABASE = Config["mssql:database"];
+            DB_USERNAME = Config["mssql:username"];
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder OptionsBuilder)
         {
-            optionsBuilder.UseSqlServer(CONNECTION_STRING);
-            base.OnConfiguring(optionsBuilder);
+            OptionsBuilder.UseSqlServer(CONNECTION_STRING);
+            base.OnConfiguring(OptionsBuilder);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder ModelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(ModelBuilder);
         }
     }
 }

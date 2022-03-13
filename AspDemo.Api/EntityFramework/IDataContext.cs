@@ -10,7 +10,6 @@ namespace AspDemo.Api.EntityFramework
     public interface IDataContext
     {
         DbSet<Item>? Items { get; }
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-        EntityEntry Entry(object entity);
+        Task<int> SaveChangesAsync(CancellationToken CancellationToken = default);
     }
 }

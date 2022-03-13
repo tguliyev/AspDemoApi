@@ -7,11 +7,11 @@ namespace AspDemo.Api.Repositories
     //public class InMemItemsRepository : IItemsRepository
     public class InMemItemsRepository
     {
-        private List<Item> items;
+        private List<Item> Items;
 
         public InMemItemsRepository()
         {
-            this.items = new List<Item>()
+            this.Items = new List<Item>()
             {
                 new Item() { Id = 1, Name = "Audi RS3", Price = 50000 },
                 new Item() { Id = 2, Name = "Audi RS6", Price = 120000 },
@@ -22,29 +22,29 @@ namespace AspDemo.Api.Repositories
 
         public IEnumerable<Item> GetItemsAsync()
         {
-            return this.items;
+            return this.Items;
         }
 
-        public Item? GetItemAsync(int id)
+        public Item? GetItemAsync(int Id)
         {
-            return this.items.Where(item => item.Id == id).FirstOrDefault();
+            return this.Items.Where(Item => Item.Id == Id).FirstOrDefault();
         }
 
-        public void CreateItemAsync(Item item)
+        public void CreateItemAsync(Item ItemToCreate)
         {
-            items.Add(item);
+            Items.Add(ItemToCreate);
         }
 
-        public void UpdateItemAsync(Item item)
+        public void UpdateItemAsync(Item ItemToUpdate)
         {
-            int itemIndex = items.FindIndex(i => i.Id == item.Id);
-            items[itemIndex] = item;
+            int ItemIndex = Items.FindIndex(i => i.Id == ItemToUpdate.Id);
+            Items[ItemIndex] = ItemToUpdate;
         }
 
-        public void DeleteItemAsync(int id)
+        public void DeleteItemAsync(int Id)
         {
-            int index = items.FindIndex(item => item.Id == id);
-            items.RemoveAt(index);
+            int Index = Items.FindIndex(Item => Item.Id == Id);
+            Items.RemoveAt(Index);
         }
     }
 }

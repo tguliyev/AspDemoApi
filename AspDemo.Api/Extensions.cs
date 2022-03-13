@@ -5,14 +5,14 @@ namespace AspDemo.Api
 {
     public static class Extensions
     {
-        public static ItemDTO AsDTO(this Item item)
+        public static ItemDTO AsDTO(this Item Item)
         {
             return new ItemDTO 
             {
-                Id = item.Id,
-                Name = item.Name,
-                Price = item.Price,
-                CreatedTime = item.CreatedTime
+                Id = Item.Id,
+                Name = Item.Name,
+                Price = Item.Price,
+                CreatedTime = Item.CreatedTime
             };
         }
     }

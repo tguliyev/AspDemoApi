@@ -6,11 +6,11 @@ namespace AspDemo.Api.Repositories
 {
     public interface IItemsRepository
     {
-        Task<Item?> GetItemAsync(int id);
+        Task<Item?> GetItemAsync(int Id);
         Task<IEnumerable<Item>?> GetItemsAsync();
-        Task CreateItemAsync(Item item);
-        Task UpdateItemAsync(Item item);
-        Task DeleteItemAsync(int id);
+        Task CreateItemAsync(Item ItemToCreate);
+        Task UpdateItemAsync(Item ItemToUpdate);
+        Task DeleteItemAsync(Item ItemToDelete);
     }
 }
     
