@@ -88,8 +88,6 @@ namespace AspDemo.Api
             App.MapControllers();
 
             App.Run();
-
-            
         }
     }
 }

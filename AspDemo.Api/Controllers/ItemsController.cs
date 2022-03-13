@@ -21,10 +21,13 @@ namespace AspDemo.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ItemDTO>?>> GetItemsAsync()
+        public async Task<ActionResult<IEnumerable<ItemDTO>?>> GetItemsAsync(string? NameToMatch = null)
         {
             IEnumerable<ItemDTO>? Items =  (await Repository.GetItemsAsync())?
                                             .Select(Item => Item.AsDTO());
+
+            if (NameToMatch != null)
+                Items = Items?.Where(item => item.Name.Contains(NameToMatch));
 
             return Ok(Items);
         }

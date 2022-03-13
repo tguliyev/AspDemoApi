@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspDemo.Api.Controllers;
 using AspDemo.Api.DTOs;
@@ -65,6 +67,28 @@ public class ItemsControllerTests
         Result?.Value.Should().BeEquivalentTo(
             ExspectedItems,
             options => options.ComparingByMembers<Item>());
+    }
+
+    [Fact]
+    public async Task GetItemsAsync_WithMatchingItems_ReturnsMatchingItems()
+    {
+        // Arrange
+        string NameToMatch = "Audi";
+        Item[] ExspectedItems = new Item[] 
+        { 
+            new Item() { Name = "Audi RS5" }, 
+            new Item() { Name = "Porsche 911 Turbo" }, 
+            new Item() { Name = "Audi RS7" } 
+        };
+        RepositoryStub.Setup(repo => repo.GetItemsAsync()).ReturnsAsync(ExspectedItems);
+
+        ItemsController Controller = new ItemsController(RepositoryStub.Object);
+
+        // Act
+        OkObjectResult? Result = (await Controller.GetItemsAsync(NameToMatch)).Result as OkObjectResult;
+
+        // Assert
+        (Result?.Value as IEnumerable<ItemDTO>).Should().OnlyContain(item => item.Name.Contains(NameToMatch));
     }
 
     [Fact]
