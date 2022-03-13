@@ -36,10 +36,8 @@ namespace AspDemo.Api.Repositories
         }
 
         public async Task UpdateItemAsync(Item item)
-        {
-            Item? updatingItem = await context.Items.FindAsync(item.Id);
-                
-            context.Entry(updatingItem).CurrentValues.SetValues(item);
+        {    
+            context.Items.Update(item);
 
             await context.SaveChangesAsync();
         }

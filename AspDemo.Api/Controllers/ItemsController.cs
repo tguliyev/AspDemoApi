@@ -52,22 +52,17 @@ namespace AspDemo.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateItemAsync(int id, UpdateItemDTO updateItemDTO)
+        public async Task<ActionResult> UpdateItemAsync(int id, UpdateItemDTO ItemToUpdateDTO)
         {
-            Item? existingItem = await repository.GetItemAsync(id);
+            Item? ItemToUpdate = await repository.GetItemAsync(id);
 
-            if(existingItem == null)
+            if(ItemToUpdate == null)
                 return NotFound();
 
-            Item updatedItem = new Item
-            {
-                Id = existingItem.Id,
-                Name = updateItemDTO.Name,
-                Price = updateItemDTO.Price,
-                CreatedTime = existingItem.CreatedTime
-            };
+            ItemToUpdate.Name = ItemToUpdateDTO.Name;
+            ItemToUpdate.Price = ItemToUpdateDTO.Price;
 
-            await repository.UpdateItemAsync(updatedItem);
+            await repository.UpdateItemAsync(ItemToUpdate);
 
             return NoContent();
         }

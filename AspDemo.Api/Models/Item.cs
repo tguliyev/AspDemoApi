@@ -4,9 +4,9 @@ namespace AspDemo.Api.Models
 {
     public class Item
     {
-        public int Id { get; init; }
-        public string? Name { get; init; }
-        public decimal Price { get; init; }
-        public DateTimeOffset CreatedTime { get; init; }
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public decimal Price { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
     }
 }
